@@ -1,0 +1,24 @@
+scst (3.0.0-pre1+svn4501~ppa1) precise; urgency=high
+
+  * Updated to SCST 3.0.0-pre1, svn4501
+  * Changed source package name to scst
+
+ -- Fajar A. Nugraha <ubuntu-ppa@fajar.net>  Fri, 31 Aug 2012 14:23:00 +0700
+
+scstadmin (2.0.0.1-1~ppa1) lucid; urgency=high
+
+  * Updated to SCST 2.0.0.1
+
+ -- Adrian Stachowski <ast@marum.de>  Mon, 31 Jan 2011 13:10:00 +0200
+
+scstadmin (2.0.0.0-1~ppa2) lucid; urgency=high
+
+  * Switch back to procfs
+
+ -- Adrian Stachowski <ast@marum.de>  Sat, 28 Sep 2010 12:32:21 +0200
+
+scstadmin (2.0.0.0-1~ppa1) lucid; urgency=high
+
+  * Initial build of scstadmin 2
+
+ -- Adrian Stachowski <ast@marum.de>  Sat, 25 Sep 2010 14:54:01 +0200

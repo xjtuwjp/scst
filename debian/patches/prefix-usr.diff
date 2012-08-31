@@ -1,0 +1,270 @@
+commit df0ea68b8585d39d66f6da7dba9b88d68d79e5bf
+Author: Fajar A. Nugraha <github@fajar.net>
+Date:   Fri Aug 31 15:29:09 2012 +0700
+
+    use /usr as prefix
+
+diff --git a/fcst/Makefile b/fcst/Makefile
+index ca94265..30ad95d 100644
+--- a/fcst/Makefile
++++ b/fcst/Makefile
+@@ -43,7 +43,7 @@ export CONFIG_FCST   := m
+ set_var = $(shell { if [ -e "$(1)" ]; then grep -v '^$(2)=' "$(1)"; fi; echo "$(2)=$(3)"; } >/tmp/$(1)-$$$$.tmp && mv /tmp/$(1)-$$$$.tmp $(1))
+ 
+ 
+-#SCST_INC_DIR := /usr/local/include/scst
++#SCST_INC_DIR := /usr/include/scst
+ #SCST_DIR := $(SCST_INC_DIR)
+ SCST_INC_DIR := $(SUBDIRS)/../scst/include
+ SCST_DIR := $(shell pwd)/../scst/src
+diff --git a/iscsi-scst/Makefile b/iscsi-scst/Makefile
+index 9b09855..d5cb99a 100644
+--- a/iscsi-scst/Makefile
++++ b/iscsi-scst/Makefile
+@@ -9,14 +9,14 @@ SHELL=/bin/bash
+ 
+ SUBDIRS := $(shell pwd)
+ 
+-#SCST_INC_DIR := /usr/local/include/scst
++#SCST_INC_DIR := /usr/include/scst
+ SCST_INC_DIR := $(SUBDIRS)/../scst/include
+ #SCST_DIR := $(SCST_INC_DIR)
+ SCST_DIR := $(shell pwd)/../scst/src
+-SBINDIR := /usr/local/sbin
++SBINDIR := /usr/sbin
+ INITDIR := /etc/init.d
+ RCDIR := /etc/rc.d
+-MANDIR := /usr/local/man
++MANDIR := /usr/man
+ KMOD := $(shell pwd)/kernel
+ INCDIR := $(shell pwd)/include
+ 
+diff --git a/iscsi-scst/Makefile_user_space_only b/iscsi-scst/Makefile_user_space_only
+index 695ac9f..b980f88 100644
+--- a/iscsi-scst/Makefile_user_space_only
++++ b/iscsi-scst/Makefile_user_space_only
+@@ -6,7 +6,7 @@
+ # unless it's something special (not a .c file).
+ 
+ SUBDIRS := $(shell pwd)
+-SBINDIR := /usr/local/sbin
++SBINDIR := /usr/sbin
+ INITDIR := /etc/init.d
+ RCDIR := /etc/rc.d
+ 
+diff --git a/iscsi-scst/resource_agents/SCSTTarget b/iscsi-scst/resource_agents/SCSTTarget
+index c1f4e2a..be05d58 100644
+--- a/iscsi-scst/resource_agents/SCSTTarget
++++ b/iscsi-scst/resource_agents/SCSTTarget
+@@ -38,7 +38,7 @@ OCF_RESKEY_portals_default="none"
+ 
+ # Lockfile, used for selecting a target ID
+ LOCKFILE=${HA_RSCTMP}/SCSTTarget-${OCF_RESKEY_implementation}.lock
+-ISCSI_DAEMON="/usr/local/sbin/iscsi-scstd"
++ISCSI_DAEMON="/usr/sbin/iscsi-scstd"
+ SYSFS_PATH="/sys/kernel/scst_tgt/targets/iscsi"
+ SCST_BASE="/sys/kernel/scst_tgt"
+ ISCSI_BASE="${SCST_BASE}/targets/iscsi"
+diff --git a/iscsi-scst/usr/Makefile b/iscsi-scst/usr/Makefile
+index c42fb83..c1a2ee7 100644
+--- a/iscsi-scst/usr/Makefile
++++ b/iscsi-scst/usr/Makefile
+@@ -24,7 +24,7 @@ SRCS_ADM = iscsi_adm.c param.c
+ OBJS_ADM = $(SRCS_ADM:.c=.o)
+ 
+ SCST_INC_DIR := ../../scst/include
+-#SCST_INC_DIR := /usr/local/include/scst
++#SCST_INC_DIR := /usr/include/scst
+ 
+ CFLAGS += -O2 -fno-inline -Wall -Wextra -Wstrict-prototypes -Wno-sign-compare \
+ 	-Wimplicit-function-declaration -Wno-unused-parameter \
+diff --git a/mpt/Makefile b/mpt/Makefile
+index d99ef85..966f6a3 100644
+--- a/mpt/Makefile
++++ b/mpt/Makefile
+@@ -20,7 +20,7 @@
+ #    - install and uninstall must be made as root
+ #
+ 
+-#SCST_INC_DIR := /usr/local/include/scst
++#SCST_INC_DIR := /usr/include/scst
+ #SCST_DIR := $(SCST_INC_DIR)
+ SCST_INC_DIR := $(SUBDIRS)/../scst/include
+ SCST_DIR := $(shell pwd)/../scst/src
+diff --git a/mvsas_tgt/Makefile b/mvsas_tgt/Makefile
+index 153f65c..5d30083 100644
+--- a/mvsas_tgt/Makefile
++++ b/mvsas_tgt/Makefile
+@@ -38,7 +38,7 @@ endif
+ export PWD    := $(shell pwd)
+ export LIBSAS := m
+ 
+-#SCST_INC_DIR := /usr/local/include/scst
++#SCST_INC_DIR := /usr/include/scst
+ #SCST_DIR := $(SCST_INC_DIR)
+ SCST_INC_DIR := $(SUBDIRS)/../scst/include
+ SCST_DIR := $(shell pwd)/../scst/src
+diff --git a/qla2x00t/doc/qla2x00t-howto.html b/qla2x00t/doc/qla2x00t-howto.html
+index 5f45193..5257157 100644
+--- a/qla2x00t/doc/qla2x00t-howto.html
++++ b/qla2x00t/doc/qla2x00t-howto.html
+@@ -192,7 +192,7 @@ make -s -C qla2x00t/qla2x00-target install</pre>
+   Insert the kernel modules.<br>  The kernel modules have been installed in
+   '/lib/modules/`your_kernel_version`/extra'.<br>  In addition, scst.h,
+   scst_debug.h as well as Module.symvers or Modules.symvers have been copied
+-  to '/usr/local/include/scst'.<br> The first file contains all SCST's public
++  to '/usr/include/scst'.<br> The first file contains all SCST's public
+   interfaces used by target drivers. The other files allow target drivers to
+   generate debug messages and support the kernel module build process.
+ 
+diff --git a/qla2x00t/qla2x00-target/Makefile b/qla2x00t/qla2x00-target/Makefile
+index 9531033..478bb98 100644
+--- a/qla2x00t/qla2x00-target/Makefile
++++ b/qla2x00t/qla2x00-target/Makefile
+@@ -30,7 +30,7 @@
+ 
+ SHELL=/bin/bash
+ 
+-#SCST_INC_DIR := /usr/local/include/scst
++#SCST_INC_DIR := /usr/include/scst
+ #SCST_DIR := $(SCST_INC_DIR)
+ SCST_INC_DIR := $(SUBDIRS)/../../scst/include
+ SCST_DIR := $(shell pwd)/../../scst/src
+diff --git a/scst/src/Makefile b/scst/src/Makefile
+index de37b8d..2092174 100644
+--- a/scst/src/Makefile
++++ b/scst/src/Makefile
+@@ -118,7 +118,7 @@ INSTALL_DIR := $(DESTDIR)/lib/modules/$(shell uname -r)/extra
+ else
+ INSTALL_DIR := $(DESTDIR)/lib/modules/$(KVER)/extra
+ endif
+-INSTALL_DIR_H := $(DESTDIR)/usr/local/include/scst
++INSTALL_DIR_H := $(DESTDIR)/usr/include/scst
+ 
+ enable-Wextra = $(shell uname_r="$$(uname -r)"; if [ "$${uname_r%.el5}" = "$${uname_r}" ]; then echo "$(1)"; fi)
+ 
+diff --git a/scst_local/Makefile b/scst_local/Makefile
+index 156aae5..280009e 100644
+--- a/scst_local/Makefile
++++ b/scst_local/Makefile
+@@ -4,7 +4,7 @@
+ 
+ SHELL=/bin/bash
+ 
+-#SCST_INC_DIR := /usr/local/include/scst
++#SCST_INC_DIR := /usr/include/scst
+ #SCST_DIR := $(SCST_INC_DIR)
+ SCST_INC_DIR	:= $(SUBDIRS)/../scst/include/
+ SCST_DIR	:= $(shell pwd)/../scst/src
+diff --git a/scstadmin/Makefile b/scstadmin/Makefile
+index 9049bed..a8c7b1c 100644
+--- a/scstadmin/Makefile
++++ b/scstadmin/Makefile
+@@ -4,7 +4,7 @@ SCSTADMIN_DIR = $(shell if [ ! -h scstadmin ]; then		\
+ 			fi;					\
+ 			echo scstadmin)
+ 
+-MANDIR := $(DESTDIR)/usr/local/man
++MANDIR := $(DESTDIR)/usr/man
+ INITDIR := $(shell if [ -f /etc/slackware-version ]; then	\
+                      echo /etc/rc.d;				\
+                    else						\
+diff --git a/scstadmin/init.d/scst b/scstadmin/init.d/scst
+index a2d34ad..2df43fb 100755
+--- a/scstadmin/init.d/scst
++++ b/scstadmin/init.d/scst
+@@ -64,7 +64,7 @@ log_failure_msg() {
+ }
+ fi
+ 
+-PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/sbin:/usr/local/bin
++PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/sbin:/usr/bin
+ SCST_DFLT=/etc/default/scst
+ 
+ [ -x "$(which scstadmin)" ] || exit 5
+@@ -158,7 +158,7 @@ parse_scst_conf() {
+                 SCST_OPT_MODULES="crc32c-intel $SCST_OPT_MODULES";;
+         esac
+         SCST_OPT_MODULES="crc32c $SCST_OPT_MODULES"
+-        SCST_DAEMONS="/usr/local/sbin/iscsi-scstd $SCST_DAEMONS"
++        SCST_DAEMONS="/usr/sbin/iscsi-scstd $SCST_DAEMONS"
+     fi
+ }
+ 
+diff --git a/scstadmin/scstadmin.procfs/Makefile b/scstadmin/scstadmin.procfs/Makefile
+index 715fed1..fa011fb 100644
+--- a/scstadmin/scstadmin.procfs/Makefile
++++ b/scstadmin/scstadmin.procfs/Makefile
+@@ -1,7 +1,7 @@
+ MODULE_VERSION = 0.8.22
+ TOOL = scstadmin
+ 
+-SBINDIR := $(PREFIX)/usr/local/sbin
++SBINDIR := $(PREFIX)/usr/sbin
+ 
+ all: perl-module
+ 
+diff --git a/scstadmin/scstadmin.sysfs/Makefile b/scstadmin/scstadmin.sysfs/Makefile
+index a2ce58a..d7d269e 100644
+--- a/scstadmin/scstadmin.sysfs/Makefile
++++ b/scstadmin/scstadmin.sysfs/Makefile
+@@ -1,7 +1,7 @@
+ MODULE_VERSION = 0.9.10
+ TOOL = scstadmin
+ 
+-SBINDIR := /usr/local/sbin
++SBINDIR := /usr/sbin
+ 
+ all: perl-module
+ 
+diff --git a/scstadmin/scstadmin.sysfs/scst-0.9.10/Makefile.PL b/scstadmin/scstadmin.sysfs/scst-0.9.10/Makefile.PL
+index 5b400f8..f74a7dc 100644
+--- a/scstadmin/scstadmin.sysfs/scst-0.9.10/Makefile.PL
++++ b/scstadmin/scstadmin.sysfs/scst-0.9.10/Makefile.PL
+@@ -10,4 +10,5 @@ WriteMakefile(
+         'VERSION_FROM'  => 'lib/SCST/SCST.pm',
+         'AUTHOR'        => 'Mark R. Buechler <Mark.Buechler@gmail.com>',
+         'PREREQ_PM'     => {},
++        'PREFIX'        => '/usr',
+ );
+diff --git a/srpt/Makefile b/srpt/Makefile
+index e9840e7..a827f49 100644
+--- a/srpt/Makefile
++++ b/srpt/Makefile
+@@ -4,7 +4,7 @@
+ 
+ SCST_SYMVERS_DIR := $(shell if [ -e $$PWD/../scst ]; then	\
+                         echo $$PWD/../scst/src;			\
+-                      else echo /usr/local/include/scst; fi)
++                      else echo /usr/include/scst; fi)
+ SUBDIRS := $(shell pwd)
+ 
+ ifeq ($(KVER),)
+diff --git a/srpt/src/Makefile b/srpt/src/Makefile
+index 2992545..d82020a 100644
+--- a/srpt/src/Makefile
++++ b/srpt/src/Makefile
+@@ -1,7 +1,7 @@
+ SCST_INC_DIR := $(shell d="$(dir $(lastword $(MAKEFILE_LIST)))";	\
+                   if [ -e "$$d../../scst" ];				\
+                   then echo "$$d../../scst/include";			\
+-                  else echo "/usr/local/include/scst"; fi)
++                  else echo "/usr/include/scst"; fi)
+ EXTRA_CFLAGS += -I$(SCST_INC_DIR)
+ 
+ -include $(SUBDIRS)/../build_mode
+diff --git a/usr/fileio/Makefile b/usr/fileio/Makefile
+index 06724ab..bb921a6 100644
+--- a/usr/fileio/Makefile
++++ b/usr/fileio/Makefile
+@@ -24,8 +24,8 @@ OBJS_F = $(SRCS_F:.c=.o)
+ #OBJS_C = $(SRCS_C:.c=.o)
+ 
+ SCST_INC_DIR := ../../scst/include
+-#SCST_INC_DIR := /usr/local/include/scst
+-INSTALL_DIR := /usr/local/bin/scst
++#SCST_INC_DIR := /usr/include/scst
++INSTALL_DIR := /usr/bin/scst
+ 
+ CFLAGS += -O2 -Wall -Wextra -Wno-unused-parameter -Wstrict-prototypes \
+ 	-I$(SCST_INC_DIR) -D_GNU_SOURCE -D__USE_FILE_OFFSET64 \

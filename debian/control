@@ -1,0 +1,12 @@
+Source: scst
+Section: net
+Priority: extra
+Maintainer: Adrian Stachowski <ast@marum.de>
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.8.3
+Homepage: http://scst.sourceforge.net
+
+Package: scstadmin
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: Admim tool for SCST
