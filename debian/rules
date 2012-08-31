@@ -3,6 +3,9 @@
 export DH_VERBOSE=1
 
 tmproot=$(CURDIR)/debian/tmp
+DESTDIR=$(tmproot)
+SBINDIR=/usr/sbin
+MANDIR=/usr/share/man
 
 # This has to be exported to make some magic below work.
 export DH_OPTIONS
@@ -29,18 +32,25 @@ include /usr/share/quilt/quilt.make
 clean: unpatch
 	dh_testdir
 	dh_clean
-	$(MAKE) scstadm_clean
+	$(MAKE) -C scstadmin clean
+	$(MAKE) -C iscsi-scst/usr clean
 
 install: build
 	dh_installdirs
-	$(MAKE) DESTDIR=$(tmproot) scstadm_install
-	
+	$(MAKE) DESTDIR=$(tmproot) -C scstadmin install
+
 	# hacks
 	# remove uneeded perl files
 	rm -rf $(tmproot)/usr/lib/perl
 	# fix incorrect man location
 	mkdir -p $(tmproot)/usr/share/man
 	mv -f $(tmproot)/usr/man/* $(tmproot)/usr/share/man
+	# need manual install for iscsi-scst/usr for  now
+	install -vD -m 755 iscsi-scst/usr/iscsi-scstd $(DESTDIR)$(SBINDIR)/iscsi-scstd
+	install -vD -m 644 iscsi-scst/doc/manpages/iscsi-scstd.conf.5 $(DESTDIR)$(MANDIR)/man5/iscsi-scstd.conf.5
+	install -vD -m 644 iscsi-scst/doc/manpages/iscsi-scstd.8 $(DESTDIR)$(MANDIR)/man8/iscsi-scstd.8
+	install -vD -m 755 iscsi-scst/usr/iscsi-scst-adm $(DESTDIR)$(SBINDIR)/iscsi-scst-adm
+	install -vD -m 644 iscsi-scst/doc/manpages/iscsi-scst-adm.8 $(DESTDIR)$(MANDIR)/man8/iscsi-scst-adm.8
 	
 	# install files
 	dh_installman
@@ -48,7 +58,9 @@ install: build
 
 
 build: patch
-	$(MAKE) scstadm
+	$(MAKE) -C scstadmin
+	$(MAKE) -C iscsi-scst include/iscsi_scst_itf_ver.h
+	$(MAKE) -C iscsi-scst/usr
 
 binary-indep: install
 

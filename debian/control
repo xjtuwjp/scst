@@ -8,5 +8,10 @@ Homepage: http://scst.sourceforge.net
 
 Package: scstadmin
 Architecture: any
+Depends: iscsi-scst, ${shlibs:Depends}
+Description: Admin tool for SCST
+
+Package: iscsi-scst
+Architecture: any
 Depends: ${shlibs:Depends}
-Description: Admim tool for SCST
+Description: ISCSI userland for SCST
