@@ -2,8 +2,12 @@
 # Uncomment this to turn on verbose mode.
 export DH_VERBOSE=1
 
-tmproot=$(CURDIR)/debian/tmp
-DESTDIR=$(tmproot)
+# Need to update this manually for now
+DKMSMODVER=3.0.0.1
+
+SHELL=/bin/bash
+TMPROOT=$(CURDIR)/debian/tmp
+DESTDIR=$(TMPROOT)
 SBINDIR=/usr/sbin
 MANDIR=/usr/share/man
 
@@ -37,14 +41,14 @@ clean: unpatch
 
 install: build
 	dh_installdirs
-	$(MAKE) DESTDIR=$(tmproot) -C scstadmin install
+	$(MAKE) DESTDIR=$(TMPROOT) -C scstadmin install
 
 	# hacks
 	# remove uneeded perl files
-	rm -rf $(tmproot)/usr/lib/perl
+	rm -rf $(TMPROOT)/usr/lib/perl
 	# fix incorrect man location
-	mkdir -p $(tmproot)/usr/share/man
-	mv -f $(tmproot)/usr/man/* $(tmproot)/usr/share/man
+	mkdir -p $(TMPROOT)/usr/share/man
+	mv -f $(TMPROOT)/usr/man/* $(TMPROOT)/usr/share/man
 	# need manual install for iscsi-scst/usr for  now
 	install -vD -m 755 iscsi-scst/usr/iscsi-scstd $(DESTDIR)$(SBINDIR)/iscsi-scstd
 	install -vD -m 644 iscsi-scst/doc/manpages/iscsi-scstd.conf.5 $(DESTDIR)$(MANDIR)/man5/iscsi-scstd.conf.5
@@ -52,10 +56,20 @@ install: build
 	install -vD -m 755 iscsi-scst/usr/iscsi-scst-adm $(DESTDIR)$(SBINDIR)/iscsi-scst-adm
 	install -vD -m 644 iscsi-scst/doc/manpages/iscsi-scst-adm.8 $(DESTDIR)$(MANDIR)/man8/iscsi-scst-adm.8
 	
+	# process scst-dkms manually
+	for f in debian/dkms.conf debian/scst-dkms.postinst debian/scst-dkms.prerm;do \
+		sed "s|@DKMSNAME@|scst|g" $$f.in > $$f ;\
+		sed -i "s|@DKMSMODVER@|$(DKMSMODVER)|g" $$f ;\
+	done
+	install -vD -m 644 debian/Makefile-dkms $(TMPROOT)/usr/src/scst-$(DKMSMODVER)/Makefile
+	install -vD -m 644 debian/dkms.conf $(TMPROOT)/usr/src/scst-$(DKMSMODVER)/dkms.conf
+	cp -a scst $(TMPROOT)/usr/src/scst-$(DKMSMODVER)/
+	mkdir $(TMPROOT)/usr/src/scst-$(DKMSMODVER)/iscsi-scst
+	cp -a iscsi-scst/{Makefile,include,kernel} $(TMPROOT)/usr/src/scst-$(DKMSMODVER)/iscsi-scst/
+
 	# install files
 	dh_installman
-	dh_install --sourcedir=$(tmproot)
-
+	dh_install --sourcedir=$(TMPROOT)
 
 build: patch
 	$(MAKE) -C scstadmin

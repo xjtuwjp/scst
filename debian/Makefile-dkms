@@ -1,0 +1,11 @@
+SHELL=/bin/bash
+export KDIR=/lib/modules/${KERNELRELEASE}/build
+
+SCST_DIR=scst
+SCST_ISCSI_DIR=iscsi-scst
+
+all:
+	cd $(SCST_DIR) && $(MAKE) $@
+	cd $(SCST_ISCSI_DIR) && make include/iscsi_scst_itf_ver.h && make mods
+
+.PHONY: all
