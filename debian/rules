@@ -55,6 +55,11 @@ install: build
 	install -vD -m 644 iscsi-scst/doc/manpages/iscsi-scstd.8 $(DESTDIR)$(MANDIR)/man8/iscsi-scstd.8
 	install -vD -m 755 iscsi-scst/usr/iscsi-scst-adm $(DESTDIR)$(SBINDIR)/iscsi-scst-adm
 	install -vD -m 644 iscsi-scst/doc/manpages/iscsi-scst-adm.8 $(DESTDIR)$(MANDIR)/man8/iscsi-scst-adm.8
+	# create this directory manually
+	mkdir -p $(DESTDIR)/var/lib/scst/pr
+
+	# copy example scst.conf
+	install -vD -m 644 debian/scst.conf $(DESTDIR)/etc/scst.conf
 	
 	# process scst-dkms manually
 	for f in debian/dkms.conf debian/scst-dkms.postinst debian/scst-dkms.prerm;do \
