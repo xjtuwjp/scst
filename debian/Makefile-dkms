@@ -3,9 +3,11 @@ export KDIR=/lib/modules/${KERNELRELEASE}/build
 
 SCST_DIR=scst
 SCST_ISCSI_DIR=iscsi-scst
+SCST_LOCAL_DIR=scst_local
 
 all:
 	cd $(SCST_DIR) && $(MAKE) $@
-	cd $(SCST_ISCSI_DIR) && make include/iscsi_scst_itf_ver.h && make mods
+	cd $(SCST_ISCSI_DIR) && $(MAKE) include/iscsi_scst_itf_ver.h && $(MAKE) mods
+	cd $(SCST_LOCAL_DIR) && $(MAKE) $@
 
 .PHONY: all

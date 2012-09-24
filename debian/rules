@@ -33,7 +33,7 @@ endif
 
 include /usr/share/quilt/quilt.make
 
-clean: unpatch
+clean:
 	dh_testdir
 	dh_clean
 	$(MAKE) -C scstadmin clean
@@ -71,12 +71,14 @@ install: build
 	cp -a scst $(TMPROOT)/usr/src/scst-$(DKMSMODVER)/
 	mkdir $(TMPROOT)/usr/src/scst-$(DKMSMODVER)/iscsi-scst
 	cp -a iscsi-scst/{Makefile,include,kernel} $(TMPROOT)/usr/src/scst-$(DKMSMODVER)/iscsi-scst/
+	cp -a scst_local $(TMPROOT)/usr/src/scst-$(DKMSMODVER)/
+	sed -i "s/-DCONFIG_SCST_DEBUG //g" `find $(TMPROOT)/usr/src -name Makefile`
 
 	# install files
 	dh_installman
 	dh_install --sourcedir=$(TMPROOT)
 
-build: patch
+build:
 	$(MAKE) -C scstadmin
 	$(MAKE) -C iscsi-scst include/iscsi_scst_itf_ver.h
 	$(MAKE) -C iscsi-scst/usr

@@ -38,4 +38,7 @@ DEST_MODULE_LOCATION[9]="/extra/scst/"
 BUILT_MODULE_NAME[10]="iscsi-scst"
 BUILT_MODULE_LOCATION[10]="iscsi-scst/kernel/"
 DEST_MODULE_LOCATION[10]="/extra/scst/"
+BUILT_MODULE_NAME[11]="scst_local"
+BUILT_MODULE_LOCATION[11]="scst_local/"
+DEST_MODULE_LOCATION[11]="/extra/scst/"
 

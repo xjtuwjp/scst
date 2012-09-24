@@ -1,4 +1,19 @@
-scst (3.0.0-pre1+svn4501~ppa1) precise; urgency=high
+scst (3.0.0~pre2+svn4521-ppa1) precise; urgency=high
+
+  * Updated to SCST 3.0.0-pre2, svn4521
+  * Changed source format to 3.0 (quilt)
+
+ -- Fajar A. Nugraha <ubuntu-ppa@fajar.net>  Fri, 21 Sep 2012 09:41:00 +0700
+
+scst (3.0.0~pre1+svn4505~ppa1) precise; urgency=high
+
+  * Updated to SCST 3.0.0-pre1, svn4505
+  * Disabled debug mode
+  * Added scst_local target
+
+ -- Fajar A. Nugraha <ubuntu-ppa@fajar.net>  Wed,  5 Sep 2012 08:40:00 +0700
+
+scst (3.0.0~pre1+svn4501~ppa1) precise; urgency=high
 
   * Updated to SCST 3.0.0-pre1, svn4501
   * Changed source package name to scst
