@@ -8,15 +8,20 @@ Build-Depends: debhelper (>= 6.0.7),
 Standards-Version: 3.8.3
 Homepage: http://scst.sourceforge.net
 
-Package: scstadmin
-Architecture: any
-Depends: iscsi-scst, ${shlibs:Depends}
-Description: Admin tool for SCST
-
 Package: iscsi-scst
 Architecture: any
 Depends: ${shlibs:Depends}
 Description: ISCSI userland for SCST
+
+Package: scst-fileio-tgt
+Architecture: any
+Depends: scstadmin, ${shlibs:Depends}
+Description: SCST fileio userland target
+
+Package: scstadmin
+Architecture: any
+Depends: iscsi-scst, ${shlibs:Depends}
+Description: Admin tool for SCST
 
 Package: scst-dkms
 Architecture: any

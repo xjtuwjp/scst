@@ -3,11 +3,12 @@
 export DH_VERBOSE=1
 
 # Need to update this manually for now
-DKMSMODVER=3.0.0.1
+DKMSMODVER=3.0.0.2
 
 SHELL=/bin/bash
 TMPROOT=$(CURDIR)/debian/tmp
 DESTDIR=$(TMPROOT)
+BINDIR=/usr/bin
 SBINDIR=/usr/sbin
 MANDIR=/usr/share/man
 
@@ -42,6 +43,7 @@ clean:
 install: build
 	dh_installdirs
 	$(MAKE) DESTDIR=$(TMPROOT) -C scstadmin install
+	install -vD -m 755 usr/fileio/fileio_tgt $(DESTDIR)$(BINDIR)/fileio_tgt
 
 	# hacks
 	# remove uneeded perl files
@@ -72,16 +74,20 @@ install: build
 	mkdir $(TMPROOT)/usr/src/scst-$(DKMSMODVER)/iscsi-scst
 	cp -a iscsi-scst/{Makefile,include,kernel} $(TMPROOT)/usr/src/scst-$(DKMSMODVER)/iscsi-scst/
 	cp -a scst_local $(TMPROOT)/usr/src/scst-$(DKMSMODVER)/
-	sed -i "s/-DCONFIG_SCST_DEBUG //g" `find $(TMPROOT)/usr/src -name Makefile`
+	cp -a qla2x00t $(TMPROOT)/usr/src/scst-$(DKMSMODVER)/
+	cp -a fcst $(TMPROOT)/usr/src/scst-$(DKMSMODVER)/
 
 	# install files
 	dh_installman
 	dh_install --sourcedir=$(TMPROOT)
 
 build:
+	make 2perf
 	$(MAKE) -C scstadmin
 	$(MAKE) -C iscsi-scst include/iscsi_scst_itf_ver.h
 	$(MAKE) -C iscsi-scst/usr
+	sed -i "s|/usr/local/|/usr/|g" usr/fileio/Makefile
+	$(MAKE) -C usr/fileio
 
 binary-indep: install
 

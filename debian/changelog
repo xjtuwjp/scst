@@ -1,3 +1,10 @@
+scst (3.0.0~pre2+svn4521-ppa2) precise; urgency=high
+
+  * Added scst-fileio-tgt package
+  * Added qlogic and fcst target to scst-dkms
+
+ -- Fajar A. Nugraha <ubuntu-ppa@fajar.net>  Mon, 24 Sep 2012 13:42:00 +0700
+
 scst (3.0.0~pre2+svn4521-ppa1) precise; urgency=high
 
   * Updated to SCST 3.0.0-pre2, svn4521
