@@ -903,8 +903,9 @@ static int dev_user_exec(struct scst_cmd *cmd)
 	TRACE_ENTRY();
 
 	TRACE_DBG("Preparing EXEC for user space (ucmd=%p, h=%d, lba %lld, "
-		"bufflen %d, data_len %d, ubuff %lx)", ucmd, ucmd->h,
-		(long long)cmd->lba, cmd->bufflen, cmd->data_len, ucmd->ubuff);
+		"bufflen %d, data_len %lld, ubuff %lx)", ucmd, ucmd->h,
+		(long long)cmd->lba, cmd->bufflen, (long long)cmd->data_len,
+		ucmd->ubuff);
 
 	if (cmd->data_direction & SCST_DATA_WRITE)
 		dev_user_flush_dcache(ucmd);
@@ -1330,9 +1331,9 @@ static int dev_user_process_reply_parse(struct scst_user_cmd *ucmd,
 		goto out_inval;
 
 	TRACE_DBG("ucmd %p, queue_type %x, data_direction, %x, lba %lld, "
-		"bufflen %d, data_len %d, pbuf %llx, cdb_len %d, op_flags %x",
+		"bufflen %d, data_len %lld, pbuf %llx, cdb_len %d, op_flags %x",
 		ucmd, preply->queue_type, preply->data_direction,
-		(long long)preply->lba, preply->bufflen, preply->data_len,
+		(long long)preply->lba, preply->bufflen, (long long)preply->data_len,
 		reply->alloc_reply.pbuf, preply->cdb_len, preply->op_flags);
 
 	cmd->queue_type = preply->queue_type;
@@ -1498,7 +1499,8 @@ static int dev_user_process_reply_exec(struct scst_user_cmd *ucmd,
 			 * We have an empty SG, so can't call
 			 * scst_set_resp_data_len()
 			 */
-			cmd->resp_data_len = ereply->resp_data_len;
+			WARN_ON(ereply->resp_data_len != 0);
+			cmd->resp_data_len = 0;
 			cmd->resid_possible = 1;
 		} else
 			scst_set_resp_data_len(cmd, ereply->resp_data_len);
@@ -3576,13 +3578,12 @@ static int dev_user_process_cleanup(struct scst_user_dev *dev)
 	int i;
 	for (i = 0; i < (int)ARRAY_SIZE(dev->ucmd_hash); i++) {
 		struct list_head *head = &dev->ucmd_hash[i];
-		struct scst_user_cmd *ucmd2;
-again:
-		list_for_each_entry(ucmd2, head, hash_list_entry) {
+		struct scst_user_cmd *ucmd2, *tmp;
+
+		list_for_each_entry_safe(ucmd2, tmp, head, hash_list_entry) {
 			PRINT_ERROR("Lost ucmd %p (state %x, ref %d)", ucmd2,
 				ucmd2->state, atomic_read(&ucmd2->ucmd_ref));
 			ucmd_put(ucmd2);
-			goto again;
 		}
 	}
 }

@@ -2041,7 +2041,7 @@ struct scst_cmd {
 	 * VERIFY, which transfer different amount of data (if any), than
 	 * processed.
 	 */
-	int data_len;
+	int64_t data_len;
 
 	/* Completion routine */
 	void (*scst_cmd_done) (struct scst_cmd *cmd, int next_state,
@@ -2633,7 +2633,7 @@ struct scst_acg {
 	/* List of attached acn's, protected by scst_mutex */
 	struct list_head acn_list;
 
-	/* List entry in acg_lists */
+	/* List entry in acg_lists (procfs) or tgt_acg_list (sysfs) */
 	struct list_head acg_list_entry;
 
 	/* Name of this acg */
@@ -3161,7 +3161,7 @@ static inline int scst_cmd_get_bufflen(struct scst_cmd *cmd)
  * Returns cmd's data_len. See the corresponding field's description in
  * struct scst_cmd above.
  */
-static inline int scst_cmd_get_data_len(struct scst_cmd *cmd)
+static inline int64_t scst_cmd_get_data_len(struct scst_cmd *cmd)
 {
 	return cmd->data_len;
 }
