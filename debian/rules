@@ -82,7 +82,7 @@ install: build
 	dh_install --sourcedir=$(TMPROOT)
 
 build:
-	make 2perf
+	sed -i "s/-DCONFIG_SCST_DEBUG //g" `find . -name Makefile`
 	$(MAKE) -C scstadmin
 	$(MAKE) -C iscsi-scst include/iscsi_scst_itf_ver.h
 	$(MAKE) -C iscsi-scst/usr

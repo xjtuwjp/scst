@@ -1,3 +1,9 @@
+scst (3.0.0~pre2+svn4521-ppa3) precise; urgency=high
+
+  * Replace "make 2perf" with manual sed; needed for successful build
+
+ -- Fajar A. Nugraha <ubuntu-ppa@fajar.net>  Wed, 26 Sep 2012 20:00:00 +0700
+
 scst (3.0.0~pre2+svn4521-ppa2) precise; urgency=high
 
   * Added scst-fileio-tgt package
